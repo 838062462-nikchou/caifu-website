@@ -1,78 +1,61 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000; min-height: 16.0px}
-    span.s1 {font-kerning: none}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>财赋网 · 每日报告</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        .container { max-width: 700px; margin: 40px auto; padding: 24px; }
+        h2 { margin-bottom: 24px; color: #1a1a1a; }
+        .report-item { padding: 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .report-item a { color: #2563eb; text-decoration: none; font-size: 16px; }
+        .report-time { color: #666; font-size: 13px; }
+        .tip { margin-top: 20px; padding: 12px; background: #f5f7fa; border-radius: 8px; color: #666; font-size: 14px; }
+    </style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="zh-CN"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;财赋网 · 每日报告&lt;/title&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.container { max-width: 700px; margin: 40px auto; padding: 24px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>h2 { margin-bottom: 24px; color: #1a1a1a; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.report-item { padding: 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.report-item a { color: #2563eb; text-decoration: none; font-size: 16px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.report-time { color: #666; font-size: 13px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.tip { margin-top: 20px; padding: 12px; background: #f5f7fa; border-radius: 8px; color: #666; font-size: 14px; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;h2&gt;📊 每日报告列表&lt;/h2&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="report-list"&gt;加载中...&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="tip"&gt;💡 新报表上传到 reports 文件夹后，刷新页面自动更新列表&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">&lt;script&gt;</span></p>
-<p class="p1"><span class="s1">const USER = "838062462-nikchou";</span></p>
-<p class="p1"><span class="s1">const REPO = "caifu-website";</span></p>
-<p class="p1"><span class="s1">const PATH = "reports";</span></p>
-<p class="p1"><span class="s1">const BRANCH = "main";</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">async function loadReports() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const listEl = document.getElementById("report-list");</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>try {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${PATH}?ref=${BRANCH}`);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const data = await res.json();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (!Array.isArray(data)) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>listEl.innerHTML = "&lt;p&gt;暂无报表，请先上传文件&lt;/p&gt;";</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>return;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 按时间倒序，最新的在最上面</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>data.sort((a,b) =&gt; new Date(b.commit.committer.date) - new Date(a.commit.committer.date));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let html = "";</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>data.forEach(item =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (item.type === "file") {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const fileUrl = `https://${USER}.github.io/${REPO}/${PATH}/${item.name}`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const date = new Date(item.commit.committer.date).toLocaleString("zh-CN");</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>html += `</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="report-item"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;a href="${fileUrl}" target="_blank"&gt;${item.name}&lt;/a&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;span class="report-time"&gt;${date}&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>listEl.innerHTML = html || "&lt;p&gt;暂无报表，请先上传文件&lt;/p&gt;";</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>} catch (e) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>listEl.innerHTML = "&lt;p&gt;加载失败，请刷新重试&lt;/p&gt;";</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p1"><span class="s1">loadReports();</span></p>
-<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+    <div class="container">
+        <h2>📊 每日报告列表</h2>
+        <div id="report-list">加载中...</div>
+        <div class="tip">💡 新报表上传到 reports 文件夹后，刷新页面自动更新列表</div>
+    </div>
+
+<script>
+const USER = "838062462-nikchou";
+const REPO = "caifu-website";
+const PATH = "reports";
+const BRANCH = "main";
+
+async function loadReports() {
+    const listEl = document.getElementById("report-list");
+    try {
+        const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${PATH}?ref=${BRANCH}`);
+        const data = await res.json();
+        if (!Array.isArray(data)) {
+            listEl.innerHTML = "<p>暂无报表，请先上传文件</p>";
+            return;
+        }
+        // 按时间倒序，最新的在最上面
+        data.sort((a,b) => new Date(b.commit.committer.date) - new Date(a.commit.committer.date));
+        let html = "";
+        data.forEach(item => {
+            if (item.type === "file") {
+                const fileUrl = `https://${USER}.github.io/${REPO}/${PATH}/${item.name}`;
+                const date = new Date(item.commit.committer.date).toLocaleString("zh-CN");
+                html += `
+                <div class="report-item">
+                    <a href="${fileUrl}" target="_blank">${item.name}</a>
+                    <span class="report-time">${date}</span>
+                </div>`;
+            }
+        });
+        listEl.innerHTML = html || "<p>暂无报表，请先上传文件</p>";
+    } catch (e) {
+        listEl.innerHTML = "<p>加载失败，请刷新重试</p>";
+    }
+}
+loadReports();
+</script>
 </body>
 </html>
