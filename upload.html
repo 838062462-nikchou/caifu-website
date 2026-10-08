@@ -1,232 +1,163 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>数据上传 - 财赋网</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, 'PingFang SC', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #e3f2fd 100%); min-height: 100vh; padding: 40px 20px; color: #1a1a1a; }
-    .container { max-width: 500px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 32px 24px; box-shadow: 0 4px 24px rgba(30, 136, 229, 0.1); }
-    h1 { font-size: 22px; color: #1e88e5; margin-bottom: 8px; }
-    .subtitle { font-size: 13px; color: #888; margin-bottom: 24px; }
-    .upload-area { border: 2px dashed #ccc; border-radius: 12px; padding: 40px 20px; text-align: center; background: #fafafa; transition: all 0.3s; cursor: pointer; }
-    .upload-area:hover, .upload-area.dragover { border-color: #1e88e5; background: #e3f2fd; }
-    .upload-area input { display: none; }
-    .upload-icon { font-size: 48px; margin-bottom: 12px; }
-    .upload-text { font-size: 14px; color: #666; }
-    .progress { margin-top: 20px; display: none; }
-    .progress-bar { height: 8px; background: #e8eef4; border-radius: 4px; overflow: hidden; margin-top: 8px; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, #1e88e5, #00b8d4); width: 0%; transition: width 0.3s; }
-    .status { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 14px; display: none; }
-    .status.success { background: #e8f5e9; color: #1b5e20; }
-    .status.error { background: #ffebee; color: #b71c1c; }
-    .info { margin-top: 24px; padding: 16px; background: #f5f7fa; border-radius: 8px; font-size: 13px; color: #666; line-height: 1.7; }
-    .info strong { color: #1e88e5; }
-    .file-info { margin-top: 12px; padding: 12px; background: #fff; border-radius: 8px; border: 1px solid #e8eef4; font-size: 13px; display: none; }
-    .file-info .row { display: flex; justify-content: space-between; padding: 4px 0; }
-    .file-info .label { color: #888; }
-    .file-info .value { color: #1e88e5; font-weight: 600; }
-    .saving { margin-top: 16px; padding: 12px; background: #fff3e0; border-radius: 8px; font-size: 13px; color: #e65100; display: none; }
-  </style>
-  <!-- SheetJS 用于压缩 xlsx -->
-  <script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/xlsx.full.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据上传 - 财赋网</title>
+<style>
+body { font-family: -apple-system, "PingFang SC", sans-serif; margin: 0; padding: 0; background: #f5f7fa; }
+.box { max-width: 500px; margin: 40px auto; background: #fff; padding: 30px 24px; border-radius: 12px; }
+h1 { color: #1e88e5; font-size: 22px; margin: 0 0 8px; }
+.sub { color: #888; font-size: 13px; margin: 0 0 24px; }
+.area { border: 2px dashed #ccc; border-radius: 8px; padding: 30px 20px; text-align: center; background: #fafafa; cursor: pointer; }
+.area:hover { border-color: #1e88e5; background: #e3f2fd; }
+.area input { display: none; }
+.ico { font-size: 40px; margin-bottom: 8px; }
+.txt { font-size: 14px; color: #666; }
+.hint { font-size: 11px; color: #aaa; margin-top: 6px; }
+.btn { background: #1e88e5; color: #fff; padding: 12px 32px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; margin-top: 20px; width: 100%; }
+.btn:disabled { background: #ccc; }
+.bar { height: 6px; background: #e8eef4; border-radius: 3px; margin-top: 12px; overflow: hidden; display: none; }
+.fill { height: 100%; background: #1e88e5; width: 0%; transition: width 0.2s; }
+.msg { margin-top: 16px; padding: 12px; border-radius: 6px; font-size: 14px; display: none; word-break: break-all; }
+.ok { background: #e8f5e9; color: #1b5e20; }
+.err { background: #ffebee; color: #b71c1c; }
+.info { background: #f5f7fa; padding: 14px; border-radius: 6px; margin-top: 24px; font-size: 12px; color: #666; line-height: 1.7; }
+.fname { font-size: 12px; color: #666; margin-top: 8px; word-break: break-all; }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>📤 数据上传</h1>
-    <p class="subtitle">财赋网智能表格 · 自动压缩 · 永久保存</p>
+<div class="box">
+<h1>📤 数据上传</h1>
+<p class="sub">财赋网每日报告 · 服务器自动处理</p>
 
-    <label class="upload-area" id="uploadArea">
-      <input type="file" id="fileInput" accept=".xlsx,.xls">
-      <div class="upload-icon">📊</div>
-      <div class="upload-text">点击或拖拽 xlsx 文件</div>
-      <div style="font-size:11px;color:#aaa;margin-top:8px;">支持 .xlsx / .xls · 上传前自动压缩</div>
-    </label>
+<label class="area" id="area">
+<input type="file" id="file" accept=".xlsx,.xls">
+<div class="ico">📊</div>
+<div class="txt">点击或拖拽 xlsx 文件</div>
+<div class="hint">支持 .xlsx / .xls · 不限大小</div>
+</label>
 
-    <div class="file-info" id="fileInfo">
-      <div class="row"><span class="label">文件名：</span><span class="value" id="fileName">-</span></div>
-      <div class="row"><span class="label">原始大小：</span><span class="value" id="originalSize">-</span></div>
-      <div class="row"><span class="label">压缩后：</span><span class="value" id="compressedSize">-</span></div>
-      <div class="row"><span class="label">压缩率：</span><span class="value" id="compressionRatio">-</span></div>
-    </div>
+<div class="fname" id="fname"></div>
 
-    <div class="saving" id="saving">⏳ 正在压缩 xlsx（去除冗余 / 重新打包）...</div>
+<div class="bar" id="bar"><div class="fill" id="fill"></div></div>
 
-    <div class="progress" id="progress">
-      <div style="font-size:13px;color:#666;">上传进度</div>
-      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <div style="font-size:12px;color:#888;margin-top:4px;text-align:right;" id="progressText">0%</div>
-    </div>
+<button class="btn" id="btn" disabled>上传文件</button>
 
-    <div class="status" id="status"></div>
+<div class="msg" id="msg"></div>
 
-    <div class="info">
-      <strong>📌 上传流程：</strong><br>
-      1. 选择 / 拖拽 xlsx 文件<br>
-      2. <strong>浏览器自动压缩</strong>（111MB → 通常 30MB）<br>
-      3. 上传到 Cloudflare R2（永久存储）<br>
-      4. 自动触发报告生成（30-60 秒）<br>
-      5. 永久地址：<br>
-      <code style="font-size:11px;color:#1e88e5;">https://838062462-nikchou.github.io/caifu-website/daily-report.html</code>
-    </div>
-  </div>
+<div class="info">
+<b style="color:#1e88a8;">📌 使用说明：</b><br>
+1. 选择 xlsx 文件<br>
+2. 点击「上传文件」<br>
+3. 服务器自动压缩 + 生成报告<br>
+4. 永久报告地址：<br>
+<span style="color:#1e88e5;">838062462-nikchou.github.io/caifu-website/daily-report.html</span>
+</div>
+</div>
 
-  <script>
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-    const fileInfo = document.getElementById('fileInfo');
-    const saving = document.getElementById('saving');
-    const progress = document.getElementById('progress');
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    const status = document.getElementById('status');
+<script>
+(function() {
+  var area = document.getElementById("area");
+  var file = document.getElementById("file");
+  var btn = document.getElementById("btn");
+  var bar = document.getElementById("bar");
+  var fill = document.getElementById("fill");
+  var msg = document.getElementById("msg");
+  var fn = document.getElementById("fname");
+  var cur = null;
 
-    // 当前上传 URL（Cloudflare Pages 部署的 API）
-    // 你部署后改这里
-    const UPLOAD_URL = '/api/upload';
+  function onFile(f) {
+    cur = f;
+    fn.textContent = "已选择: " + f.name + " (" + (f.size/1024/1024).toFixed(2) + " MB)";
+    btn.disabled = false;
+    btn.textContent = "上传文件";
+    hideMsg();
+  }
 
-    // 拖拽支持
-    uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.classList.add('dragover');
-    });
-    uploadArea.addEventListener('dragleave', () => {
-      uploadArea.classList.remove('dragover');
-    });
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove('dragover');
-      const files = e.dataTransfer.files;
-      if (files.length > 0) handleFile(files[0]);
-    });
-
-    fileInput.addEventListener('change', (e) => {
-      if (e.target.files.length > 0) handleFile(e.target.files[0]);
-    });
-
-    async function handleFile(file) {
-      if (!file.name.toLowerCase().endsWith('.xlsx') && !file.name.toLowerCase().endsWith('.xls')) {
-        showStatus('error', '❌ 只支持 .xlsx 或 .xls 文件');
-        return;
-      }
-
-      if (file.size > 200 * 1024 * 1024) {
-        showStatus('error', '❌ 文件超过 200MB，无法处理');
-        return;
-      }
-
-      // 显示文件信息
-      document.getElementById('fileName').textContent = file.name;
-      document.getElementById('originalSize').textContent = formatSize(file.size);
-      fileInfo.style.display = 'block';
-
-      // 客户端压缩
-      saving.style.display = 'block';
-      try {
-        const compressed = await compressXlsx(file);
-        document.getElementById('compressedSize').textContent = formatSize(compressed.size);
-        const ratio = ((file.size - compressed.size) / file.size * 100).toFixed(1);
-        document.getElementById('compressionRatio').textContent = ratio + '%';
-
-        saving.style.display = 'none';
-        saving.textContent = '⏳ 正在上传...';
-
-        // 上传
-        await uploadFile(compressed.blob, file.name);
-      } catch (err) {
-        saving.style.display = 'none';
-        showStatus('error', '❌ 压缩失败: ' + err.message);
-      }
+  area.addEventListener("dragover", function(e) {
+    e.preventDefault();
+    area.style.borderColor = "#1e88e5";
+  });
+  area.addEventListener("dragleave", function() {
+    area.style.borderColor = "#ccc";
+  });
+  area.addEventListener("drop", function(e) {
+    e.preventDefault();
+    area.style.borderColor = "#ccc";
+    if (e.dataTransfer.files.length > 0) {
+      onFile(e.dataTransfer.files[0]);
     }
+  });
+  file.addEventListener("change", function() {
+    if (file.files.length > 0) onFile(file.files[0]);
+  });
 
-    async function compressXlsx(file) {
-      // 读取 xlsx
-      const buffer = await file.arrayBuffer();
-      const workbook = XLSX.read(buffer, { type: 'array', cellDates: true });
+  btn.addEventListener("click", function() {
+    if (!cur) return;
+    btn.disabled = true;
+    btn.textContent = "上传中...";
+    bar.style.display = "block";
+    fill.style.width = "0%";
 
-      // 重新写入（压缩模式）
-      const compressedBuffer = XLSX.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array',
-        compression: true,  // 启用压缩
-      });
+    var fd = new FormData();
+    fd.append("file", cur);
 
-      const blob = new Blob([compressedBuffer], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      });
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/upload");
 
-      return { blob, size: blob.size };
-    }
+    xhr.upload.onprogress = function(e) {
+      if (e.lengthComputable) {
+        var pct = Math.round(e.loaded / e.total * 100);
+        fill.style.width = pct + "%";
+      }
+    };
 
-    async function uploadFile(blob, originalName) {
-      progress.style.display = 'block';
-      saving.style.display = 'block';
-      saving.textContent = '⏳ 正在上传...';
+    xhr.onload = function() {
+      bar.style.display = "none";
+      btn.disabled = false;
+      btn.textContent = "重新上传";
 
-      const formData = new FormData();
-      formData.append('file', blob, originalName);
-
-      try {
-        const xhr = new XMLHttpRequest();
-
-        // 上传进度
-        xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) {
-            const pct = Math.round(e.loaded / e.total * 100);
-            progressFill.style.width = pct + '%';
-            progressText.textContent = pct + '%';
-          }
-        };
-
-        // 完成
-        xhr.onload = () => {
-          saving.style.display = 'none';
-          if (xhr.status === 200) {
-            try {
-              const result = JSON.parse(xhr.responseText);
-              if (result.success) {
-                showStatus('success',
-                  '✅ 上传成功！<br>' +
-                  '📦 文件：' + result.filename + '<br>' +
-                  '📊 大小：' + formatSize(result.size_kb * 1024) + '<br>' +
-                  '⏳ 报告生成中，约 30-60 秒...'
-                );
-              } else {
-                showStatus('error', '❌ 上传失败: ' + (result.error || '未知错误'));
-              }
-            } catch (err) {
-              showStatus('error', '❌ 响应解析失败');
-            }
+      if (xhr.status === 200) {
+        try {
+          var r = JSON.parse(xhr.responseText);
+          if (r.success) {
+            showMsg("ok", "✅ 上传成功！<br>" +
+              "📦 文件: " + r.filename + "<br>" +
+              "📊 大小: " + (r.size_kb/1024).toFixed(2) + " MB<br>" +
+              "💾 " + (r.compression || "") + "<br>" +
+              "📋 报告: " + (r.report_summary || "生成中...") + "<br>" +
+              "🔗 <a href='" + r.report_url + "' target='_blank'>查看完整报告</a>");
           } else {
-            showStatus('error', '❌ 服务器错误: HTTP ' + xhr.status);
+            showMsg("err", "❌ 失败: " + r.error);
           }
-        };
-
-        xhr.onerror = () => {
-          saving.style.display = 'none';
-          showStatus('error', '❌ 网络错误，请检查 Cloudflare Pages 是否已部署 functions');
-        };
-
-        xhr.open('POST', UPLOAD_URL);
-        xhr.send(formData);
-      } catch (err) {
-        saving.style.display = 'none';
-        showStatus('error', '❌ 上传失败: ' + err.message);
+        } catch (err) {
+          showMsg("err", "❌ 响应解析失败");
+        }
+      } else {
+        showMsg("err", "❌ HTTP " + xhr.status + " 错误");
       }
-    }
+    };
 
-    function showStatus(type, msg) {
-      status.className = 'status ' + type;
-      status.innerHTML = msg;
-      status.style.display = 'block';
-    }
+    xhr.onerror = function() {
+      bar.style.display = "none";
+      btn.disabled = false;
+      btn.textContent = "重试";
+      showMsg("err", "❌ 网络错误，请检查服务器");
+    };
 
-    function formatSize(bytes) {
-      if (bytes < 1024) return bytes + ' B';
-      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-      return (bytes / 1024 / 1024).toFixed(2) + ' MB';
-    }
-  </script>
+    xhr.send(fd);
+  });
+
+  function showMsg(type, html) {
+    msg.className = "msg " + type;
+    msg.innerHTML = html;
+    msg.style.display = "block";
+  }
+  function hideMsg() {
+    msg.style.display = "none";
+  }
+})();
+</script>
 </body>
 </html>
